@@ -3,204 +3,102 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Glossário Robótico — Libras</title>
+<title>Glossário Arqueológico - Libras</title>
 <style>
-  :root{
-    --bg1: #0f1724;    /* fundo escuro */
-    --bg2: #061226;    /* gradiente */
-    --card: #0b1220;
-    --accent: #00d1ff; /* ciano robô */
-    --accent2:#7cf5b3; /* verde suave */
-    --glass: rgba(255,255,255,0.04);
-    --radius:14px;
-    font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
-    color-scheme: dark;
+  :root {
+    --cor-fundo: #050510;
+    --cor-secundaria: #00e6b8;
+    --texto-claro: #e0e0e0;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;
-    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,209,255,0.06), transparent),
-                linear-gradient(180deg,var(--bg1),var(--bg2));
-    color:#e6f7fb;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    padding-bottom:40px;
+  body {
+    margin: 0;
+    background: var(--cor-fundo);
+    font-family: "Segoe UI", sans-serif;
+    color: var(--texto-claro);
+    overflow-x: hidden;
   }
 
-  header{
-    display:flex;
-    gap:12px;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 22px;
-    border-bottom:1px solid rgba(255,255,255,0.04);
-    backdrop-filter: blur(4px);
-  }
-  .brand{
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-  .robot-badge{
-    width:44px; height:44px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2));
-    border-radius:10px;
-    display:grid; place-items:center;
-    box-shadow:0 6px 18px rgba(0,209,255,0.08), inset 0 -6px 18px rgba(255,255,255,0.03);
-  }
-  .robot-badge svg{width:26px; height:26px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6));}
-  h1{font-size:18px; margin:0; letter-spacing:0.6px}
-  .controls{display:flex; gap:10px; align-items:center;}
-  .btn{
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,0.04);
-    color:var(--accent);
-    padding:8px 12px;
-    border-radius:10px;
-    cursor:pointer;
-    font-weight:600;
-    font-size:13px;
-  }
-  .btn.ghost{background:transparent; color:#cfeff8; border:1px solid rgba(255,255,255,0.03)}
-  .btn:active{transform:translateY(1px)}
-
-  .container{
-    max-width:980px;
-    margin:28px auto;
-    padding:0 16px;
-    display:grid;
-    gap:18px;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    align-items:start;
+  /* fundo animado canvas */
+  canvas#fundo {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at center, #0a0a14 0%, #050510 100%);
   }
 
-  .card{
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:var(--radius);
-    padding:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:220px;
-    box-shadow: 0 6px 22px rgba(2,6,23,0.5);
-    transition: transform .28s ease, box-shadow .28s ease;
-    position:relative;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.03);
+  header {
+    text-align: center;
+    padding: 25px;
+    background: rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(0,230,184,0.3);
+    box-shadow: 0 4px 15px rgba(0,230,184,0.2);
   }
-  .card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.6); }
-
-  .card img, .card video{
-    width:100%;
-    max-width:540px;       /* desktop max */
-    height:auto;
-    border-radius:10px;
-    display:block;
-    transition: transform .25s ease;
-    outline:1px solid rgba(255,255,255,0.03);
-    box-shadow: 0 8px 30px rgba(3,12,30,0.5);
+  header h1 {
+    margin: 0;
+    color: var(--cor-secundaria);
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px var(--cor-secundaria);
   }
 
-  /* smaller images than before */
-  @media(min-width:720px){
-    .card img, .card video{max-width:420px;}
-  }
-  @media(max-width:719px){
-    .card{min-height:180px}
-    .card img, .card video{max-width:360px}
-  }
-
-  /* decorative grid lines - robot feel */
-  .grid-deco{
-    position:fixed;
-    inset:auto 0 0 0;
-    height:160px;
-    pointer-events:none;
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px),
-      linear-gradient(0deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-    background-size:80px 80px, 80px 80px;
-    opacity:0.35;
-    mix-blend-mode:overlay;
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
   }
 
-  footer{
-    text-align:center;
-    padding:18px 12px;
-    color:rgba(230,247,251,0.6);
-    font-size:13px;
+  .card {
+    width: 70%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 230, 184, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    backdrop-filter: blur(6px);
+  }
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(0,230,184,0.3);
   }
 
-  /* small widget */
-  .widget{
-    display:flex; gap:8px; align-items:center;
-    background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(255,255,255,0.02));
-    border-radius:10px; padding:8px;
-    border:1px solid rgba(255,255,255,0.03);
+  .card img, .card video {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(0,230,184,0.4);
   }
-  .slider{width:120px}
 
-  /* subtle animated gear */
-  .gear{
-    position:absolute;
-    right:-40px; top:-40px;
-    width:120px; height:120px;
-    opacity:.06; transform:rotate(0deg);
-    filter:blur(.2px);
-    transition:opacity .4s ease;
+  footer {
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+    color: #aaa;
   }
-  .card:hover .gear{opacity:.10; transform:rotate(12deg)}
-  /* focus styles for accessibility */
-  .btn:focus, .card:focus{outline:2px solid rgba(0,209,255,0.12); outline-offset:2px}
 </style>
 </head>
 <body>
+<canvas id="fundo"></canvas>
+
 <header>
-  <div class="brand">
-    <div class="robot-badge" aria-hidden="true">
-      <!-- simple robot icon -->
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="7" width="16" height="10" rx="2" stroke="#04121A" stroke-width="1.2"/>
-        <circle cx="8.5" cy="11.5" r="1.2" fill="#04121A"/>
-        <circle cx="15.5" cy="11.5" r="1.2" fill="#04121A"/>
-        <rect x="9.2" y="3.5" width="5.6" height="3" rx="1.2" fill="#04121A"/>
-      </svg>
-    </div>
-    <div>
-      <h1>Glossário — Robótica · Libras</h1>
-      <div style="font-size:12px; color:rgba(230,247,251,0.65)">Imagens em destaque — toque nas opções</div>
-    </div>
-  </div>
-
-  <div class="controls" aria-hidden="false">
-    <div class="widget" title="Tamanho imagens">
-      <label style="font-size:12px; color:rgba(230,247,251,0.7)">Tamanho</label>
-      <input class="slider" id="sizeRange" type="range" min="60" max="100" value="90" aria-label="Tamanho das imagens">
-    </div>
-
-    <button class="btn" id="robotToggle" title="Ativa efeitos robóticos">Modo Robô</button>
-    <button class="btn ghost" id="shuffleBtn" title="Embaralhar ordem">Embaralhar</button>
-  </div>
+  <h1>Glossário Arqueológico — Libras</h1>
 </header>
 
-<main class="container" id="grid">
+<main class="container">
   <section class="card"><img src="page_01.png" alt="Página 1"></section>
   <section class="card"><img src="page_02.png" alt="Página 2"></section>
   <section class="card"><img src="page_03.png" alt="Página 3"></section>
 
   <section class="card">
-    <video controls muted playsinline preload="metadata">
+    <video controls muted playsinline>
       <source src="video escavadora.mp4" type="video/mp4">
-      Seu navegador não suporta vídeo.
+      Seu navegador não suporta vídeos.
     </video>
-    <!-- decorative gear -->
-    <svg class="gear" viewBox="0 0 100 100" aria-hidden="true">
-      <g fill="none" stroke="#00d1ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="50" cy="50" r="18" opacity="0.22"></circle>
-        <path d="M50 28 L50 18 M50 82 L50 72 M28 50 L18 50 M82 50 L72 50 M34 34 L28 28 M66 66 L72 72 M34 66 L28 72 M66 34 L72 28" opacity="0.22"/>
-      </g>
-    </svg>
   </section>
 
   <section class="card"><img src="page_05.png" alt="Página 5"></section>
@@ -213,100 +111,69 @@
   <section class="card"><img src="page_12.png" alt="Página 12"></section>
 </main>
 
-<div class="grid-deco" aria-hidden="true"></div>
-
 <footer>
-  Gerado em 2025-11-06 • Toque 'Modo Robô' para efeitos.
+  © Glossário Arqueológico — Libras | 2025
 </footer>
 
 <script>
-/* SHORT JS:
- - controla tamanho via slider
- - modo robô: brilho, pequenas rotações e som (muted)
- - embaralha cards
- - teclas: R = modo Robô, S = embaralhar
-*/
+  // Animação de partículas e linhas de energia
+  const canvas = document.getElementById("fundo");
+  const ctx = canvas.getContext("2d");
+  let particles = [];
 
-// cache
-const sizeRange = document.getElementById('sizeRange');
-const grid = document.getElementById('grid');
-const robotToggle = document.getElementById('robotToggle');
-const shuffleBtn = document.getElementById('shuffleBtn');
-let robotOn = false;
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener("resize", resize);
+  resize();
 
-// apply size (percentage of available width)
-function applySize(pct){
-  // images scale via transform to keep layout consistent
-  document.querySelectorAll('.card img, .card video').forEach(el=>{
-    el.style.transform = `scale(${pct/100})`;
-  });
-}
-applySize(Number(sizeRange.value));
-
-sizeRange.addEventListener('input', e=>{
-  applySize(Number(e.target.value));
-});
-
-// robot mode toggle
-robotToggle.addEventListener('click', toggleRobot);
-document.addEventListener('keydown', (e)=>{
-  if(e.key.toLowerCase() === 'r') toggleRobot();
-  if(e.key.toLowerCase() === 's') shuffleCards();
-});
-
-function toggleRobot(){
-  robotOn = !robotOn;
-  document.body.style.transition = 'filter .4s ease';
-  if(robotOn){
-    robotToggle.textContent = 'Robô: ON';
-    document.body.style.filter = 'saturate(1.06) contrast(1.03)';
-    // small animated glow on images
-    document.querySelectorAll('.card').forEach((c,i)=>{
-      c.style.border = '1px solid rgba(0,209,255,0.06)';
-      c.style.boxShadow = '0 20px 50px rgba(0,209,255,0.06)';
-      // tiny tilt
-      c.style.transform = `translateY(-4px) rotate(${(i%2?1:-1)}deg)`;
-    });
-  } else {
-    robotToggle.textContent = 'Modo Robô';
-    document.body.style.filter = '';
-    document.querySelectorAll('.card').forEach(c=>{
-      c.style.border = '';
-      c.style.boxShadow = '';
-      c.style.transform = '';
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: (Math.random() - 0.5) * 0.6
     });
   }
-}
 
-// shuffle function
-shuffleBtn.addEventListener('click', shuffleCards);
-function shuffleCards(){
-  const cards = Array.from(grid.children);
-  for(let i = cards.length -1; i>0; i--){
-    const j = Math.floor(Math.random() * (i+1));
-    grid.appendChild(cards[j]);
-    cards.splice(j,1);
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = "#00e6b8";
+      ctx.fill();
+    }
+
+    // Conecta partículas próximas com linhas
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 100) {
+          ctx.strokeStyle = `rgba(0,230,184,${1 - dist / 100})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Movimento
+    for (let p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    }
+
+    requestAnimationFrame(draw);
   }
-  // small focus effect to show change
-  grid.animate([{opacity:0.85},{opacity:1}],{duration:240});
-}
-
-// small accessible focus via keyboard on cards
-document.querySelectorAll('.card').forEach(c=>{
-  c.tabIndex = 0;
-});
-
-// remember slider preference in session
-window.addEventListener('beforeunload', ()=>{
-  sessionStorage.setItem('gloss_size', sizeRange.value);
-  sessionStorage.setItem('gloss_robot', robotOn ? '1':'0');
-});
-document.addEventListener('DOMContentLoaded', ()=>{
-  const s = sessionStorage.getItem('gloss_size');
-  const r = sessionStorage.getItem('gloss_robot');
-  if(s) { sizeRange.value = s; applySize(Number(s)); }
-  if(r === '1') { toggleRobot(); }
-});
+  draw();
 </script>
 </body>
 </html>
