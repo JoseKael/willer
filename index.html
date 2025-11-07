@@ -3,195 +3,310 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Glossário Arqueológico - Libras</title>
+<title>Glossário Robótico — Libras</title>
 <style>
-  :root{font-family: Arial, Helvetica, sans-serif; color:#111;}
-  body{margin:0; background:#ffffff; color:#111; line-height:1.35;}
-  header{padding:20px; text-align:center; border-bottom:1px solid #eee;}
-  header h1{margin:0; font-size:24px;}
-  .container{max-width:900px; margin:18px auto; padding:0 12px;}
-  .card{display:flex; flex-direction:column; gap:12px; padding:16px; border:1px solid #eee; border-radius:8px; margin-bottom:18px; box-shadow:0 2px 6px rgba(0,0,0,0.03);}
-  .card img{max-width:100%; height:auto; border-radius:6px; outline:1px solid #f2f2f2;}
-  .term-text{white-space:pre-wrap; font-size:15px;}
-  footer{text-align:center; color:#666; font-size:13px; padding:18px 0;}
-  @media(min-width:720px){ .card{flex-direction:row;} .card img{width:40%;} .term-text{width:60%; padding-left:12px;} }
+  :root{
+    --bg1: #0f1724;    /* fundo escuro */
+    --bg2: #061226;    /* gradiente */
+    --card: #0b1220;
+    --accent: #00d1ff; /* ciano robô */
+    --accent2:#7cf5b3; /* verde suave */
+    --glass: rgba(255,255,255,0.04);
+    --radius:14px;
+    font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(0,209,255,0.06), transparent),
+                linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#e6f7fb;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding-bottom:40px;
+  }
+
+  header{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 22px;
+    border-bottom:1px solid rgba(255,255,255,0.04);
+    backdrop-filter: blur(4px);
+  }
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .robot-badge{
+    width:44px; height:44px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    border-radius:10px;
+    display:grid; place-items:center;
+    box-shadow:0 6px 18px rgba(0,209,255,0.08), inset 0 -6px 18px rgba(255,255,255,0.03);
+  }
+  .robot-badge svg{width:26px; height:26px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6));}
+  h1{font-size:18px; margin:0; letter-spacing:0.6px}
+  .controls{display:flex; gap:10px; align-items:center;}
+  .btn{
+    background:var(--glass);
+    border:1px solid rgba(255,255,255,0.04);
+    color:var(--accent);
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    font-size:13px;
+  }
+  .btn.ghost{background:transparent; color:#cfeff8; border:1px solid rgba(255,255,255,0.03)}
+  .btn:active{transform:translateY(1px)}
+
+  .container{
+    max-width:980px;
+    margin:28px auto;
+    padding:0 16px;
+    display:grid;
+    gap:18px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    align-items:start;
+  }
+
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius);
+    padding:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:220px;
+    box-shadow: 0 6px 22px rgba(2,6,23,0.5);
+    transition: transform .28s ease, box-shadow .28s ease;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,0.6); }
+
+  .card img, .card video{
+    width:100%;
+    max-width:540px;       /* desktop max */
+    height:auto;
+    border-radius:10px;
+    display:block;
+    transition: transform .25s ease;
+    outline:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 8px 30px rgba(3,12,30,0.5);
+  }
+
+  /* smaller images than before */
+  @media(min-width:720px){
+    .card img, .card video{max-width:420px;}
+  }
+  @media(max-width:719px){
+    .card{min-height:180px}
+    .card img, .card video{max-width:360px}
+  }
+
+  /* decorative grid lines - robot feel */
+  .grid-deco{
+    position:fixed;
+    inset:auto 0 0 0;
+    height:160px;
+    pointer-events:none;
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+    background-size:80px 80px, 80px 80px;
+    opacity:0.35;
+    mix-blend-mode:overlay;
+  }
+
+  footer{
+    text-align:center;
+    padding:18px 12px;
+    color:rgba(230,247,251,0.6);
+    font-size:13px;
+  }
+
+  /* small widget */
+  .widget{
+    display:flex; gap:8px; align-items:center;
+    background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(255,255,255,0.02));
+    border-radius:10px; padding:8px;
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .slider{width:120px}
+
+  /* subtle animated gear */
+  .gear{
+    position:absolute;
+    right:-40px; top:-40px;
+    width:120px; height:120px;
+    opacity:.06; transform:rotate(0deg);
+    filter:blur(.2px);
+    transition:opacity .4s ease;
+  }
+  .card:hover .gear{opacity:.10; transform:rotate(12deg)}
+  /* focus styles for accessibility */
+  .btn:focus, .card:focus{outline:2px solid rgba(0,209,255,0.12); outline-offset:2px}
 </style>
 </head>
 <body>
 <header>
-  <h1>Glossário Arqueológico — Libras</h1>
-  <p style="margin:6px 0 0; color:#666; font-size:14px;">Imagens e textos extraídos do PDF enviado.</p>
+  <div class="brand">
+    <div class="robot-badge" aria-hidden="true">
+      <!-- simple robot icon -->
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="7" width="16" height="10" rx="2" stroke="#04121A" stroke-width="1.2"/>
+        <circle cx="8.5" cy="11.5" r="1.2" fill="#04121A"/>
+        <circle cx="15.5" cy="11.5" r="1.2" fill="#04121A"/>
+        <rect x="9.2" y="3.5" width="5.6" height="3" rx="1.2" fill="#04121A"/>
+      </svg>
+    </div>
+    <div>
+      <h1>Glossário — Robótica · Libras</h1>
+      <div style="font-size:12px; color:rgba(230,247,251,0.65)">Imagens em destaque — toque nas opções</div>
+    </div>
+  </div>
+
+  <div class="controls" aria-hidden="false">
+    <div class="widget" title="Tamanho imagens">
+      <label style="font-size:12px; color:rgba(230,247,251,0.7)">Tamanho</label>
+      <input class="slider" id="sizeRange" type="range" min="60" max="100" value="90" aria-label="Tamanho das imagens">
+    </div>
+
+    <button class="btn" id="robotToggle" title="Ativa efeitos robóticos">Modo Robô</button>
+    <button class="btn ghost" id="shuffleBtn" title="Embaralhar ordem">Embaralhar</button>
+  </div>
 </header>
-<main class="container">
 
-  <section class="card" id="page-1">
-    <img src="page_01.png" alt="Página 1" />
-    <div class="term-text"><strong>Página 1</strong>
+<main class="container" id="grid">
+  <section class="card"><img src="page_01.png" alt="Página 1"></section>
+  <section class="card"><img src="page_02.png" alt="Página 2"></section>
+  <section class="card"><img src="page_03.png" alt="Página 3"></section>
 
-Mãos que descobrem
-a história: Glossário
-de Arqueologia em
-Libras</div>
-  </section>
-
-  <section class="card" id="page-2">
-    <img src="page_02.png" alt="Página 2" />
-    <div class="term-text"><strong>Página 2</strong>
-
-Este glossário foi produzido pelos alunos participantes
-do torneio de robótica FLL da Escola Bilíngue de
-Taguatinga com o objetivo de ampliar a acessibilidade
-e a inclusão de pessoas surdas no campo da
-arqueologia. A iniciativa surgiu da percepção de que
-essa 
-é 
-uma 
-área 
-com 
-pouca 
-acessibilidade
-comunicacional, especialmente para aqueles que
-utilizam a Língua Brasileira de Sinais (Libras).
-Com este material, os estudantes buscaram traduzir e
-explicar termos específicos da arqueologia de forma
-clara e acessível, contribuindo para que surdos
-interessados na área — seja por curiosidade, estudo
-ou atuação profissional — possam compreender
-melhor os conceitos e ampliar seu vocabulário técnico
-em Libras.
-Assim, o glossário representa não apenas um recurso
-educativo, mas também um instrumento de inclusão e
-valorização da diversidade linguística e cultural,
-reforçando o compromisso da escola com a educação
-bilíngue e a participação de todos nos campos da
-ciência e do conhecimento.</div>
-  </section>
-
-  <section class="card" id="page-3">
-    <img src="page_03.png" alt="Página 3" />
-    <div class="term-text"><strong>Página 3</strong>
-
-Esteglossárioépara:
-</div>
-  </section>
-
-  <section class="card" id="page-4">
-       <video 
-      controls 
-      muted 
-      playsinline 
-      style="display:block; 
-             margin:auto; 
-             width: 350px;   /* 🔹 ajuste aqui a largura do vídeo */
-             height: 340px;  /* 🔹 ajuste aqui a altura do vídeo */
-             border-radius:10px; 
-             outline:1px solid #f2f2f2; 
-             box-shadow:0 4px 10px rgba(0,0,0,0.15);">
+  <section class="card">
+    <video controls muted playsinline preload="metadata">
       <source src="video escavadora.mp4" type="video/mp4">
-      Seu navegador não suporta vídeos.
+      Seu navegador não suporta vídeo.
     </video>
-    <div class="term-text"><strong>Página 4</strong>
-
-1.
-Arqueologia - Uma
-ciência que estuda a vida
-e as atividades humanas
-no passado, conforme
-demonstrado por objetos
-(como cerâmica,
-ferramentas e estátuas)
-deixados por povos
-antigos.</div>
+    <!-- decorative gear -->
+    <svg class="gear" viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="#00d1ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="50" cy="50" r="18" opacity="0.22"></circle>
+        <path d="M50 28 L50 18 M50 82 L50 72 M28 50 L18 50 M82 50 L72 50 M34 34 L28 28 M66 66 L72 72 M34 66 L28 72 M66 34 L72 28" opacity="0.22"/>
+      </g>
+    </svg>
   </section>
 
-  <section class="card" id="page-5">
-    <img src="page_05.png" alt="Página 5" />
-    <div class="term-text"><strong>Página 5</strong>
-
-2. Artefato - Um objeto
-simples (como uma
-ferramenta ou arma) que
-foi feito por pessoas no
-passado.</div>
-  </section>
-
-  <section class="card" id="page-6">
-    <img src="page_06.png" alt="Página 6" />
-    <div class="term-text"><strong>Página 6</strong>
-
-3.  Datação por carbono -
-Uma forma científica de
-determinar a idade de algo
-muito antigo (como um osso
-de dinossauro) medindo a
-quantidade de certas
-formas de carbono
-presentes nele.</div>
-  </section>
-
-  <section class="card" id="page-7">
-    <img src="page_07.png" alt="Página 7" />
-    <div class="term-text"><strong>Página 7</strong>
-
-4. Cripta - uma câmara (como um
-cofre) total ou parcialmente
-subterrânea</div>
-  </section>
-
-  <section class="card" id="page-8">
-    <img src="page_08.png" alt="Página 8" />
-    <div class="term-text"><strong>Página 8</strong>
-
-5. Fóssil - Um vestígio, impressão
-ou restos de uma planta ou animal
-de uma era passada, preservados
-na terra ou na rocha.</div>
-  </section>
-
-  <section class="card" id="page-9">
-    <img src="page_09.png" alt="Página 9" />
-    <div class="term-text"><strong>Página 9</strong>
-
-6. Escavar - expor à vista
-removendo uma cobertura.
-7. Hieróglifo - Qualquer um dos
-símbolos na escrita pictórica do
-antigo Egito.</div>
-  </section>
-
-  <section class="card" id="page-10">
-    <img src="page_10.png" alt="Página 10" />
-    <div class="term-text"><strong>Página 10</strong>
-
-8. Lítico - Relativo a, ou
-pertencente a, uma
-ferramenta de pedra</div>
-  </section>
-
-  <section class="card" id="page-11">
-    <img src="page_11.png" alt="Página 11" />
-    <div class="term-text"><strong>Página 11</strong>
-
-9. Pré-histórico - Relativo a ou
-existente no período anterior
-ao início da história escrita.
-10. Relíquia - Algo que resta após
-a decomposição ou o
-desaparecimento.</div>
-  </section>
-
-  <section class="card" id="page-12">
-    <img src="page_12.png" alt="Página 12" />
-    <div class="term-text"><strong>Página 12</strong>
-
-12. túmulo - uma casa ou
-câmara funerária para
-pessoas mortas</div>
-  </section>
-
+  <section class="card"><img src="page_05.png" alt="Página 5"></section>
+  <section class="card"><img src="page_06.png" alt="Página 6"></section>
+  <section class="card"><img src="page_07.png" alt="Página 7"></section>
+  <section class="card"><img src="page_08.png" alt="Página 8"></section>
+  <section class="card"><img src="page_09.png" alt="Página 9"></section>
+  <section class="card"><img src="page_10.png" alt="Página 10"></section>
+  <section class="card"><img src="page_11.png" alt="Página 11"></section>
+  <section class="card"><img src="page_12.png" alt="Página 12"></section>
 </main>
+
+<div class="grid-deco" aria-hidden="true"></div>
+
 <footer>
-  Gerado em 2025-11-06 19:35. Abra o arquivo <strong>index.html</strong> no seu navegador.
+  Gerado em 2025-11-06 • Toque 'Modo Robô' para efeitos.
 </footer>
+
+<script>
+/* SHORT JS:
+ - controla tamanho via slider
+ - modo robô: brilho, pequenas rotações e som (muted)
+ - embaralha cards
+ - teclas: R = modo Robô, S = embaralhar
+*/
+
+// cache
+const sizeRange = document.getElementById('sizeRange');
+const grid = document.getElementById('grid');
+const robotToggle = document.getElementById('robotToggle');
+const shuffleBtn = document.getElementById('shuffleBtn');
+let robotOn = false;
+
+// apply size (percentage of available width)
+function applySize(pct){
+  // images scale via transform to keep layout consistent
+  document.querySelectorAll('.card img, .card video').forEach(el=>{
+    el.style.transform = `scale(${pct/100})`;
+  });
+}
+applySize(Number(sizeRange.value));
+
+sizeRange.addEventListener('input', e=>{
+  applySize(Number(e.target.value));
+});
+
+// robot mode toggle
+robotToggle.addEventListener('click', toggleRobot);
+document.addEventListener('keydown', (e)=>{
+  if(e.key.toLowerCase() === 'r') toggleRobot();
+  if(e.key.toLowerCase() === 's') shuffleCards();
+});
+
+function toggleRobot(){
+  robotOn = !robotOn;
+  document.body.style.transition = 'filter .4s ease';
+  if(robotOn){
+    robotToggle.textContent = 'Robô: ON';
+    document.body.style.filter = 'saturate(1.06) contrast(1.03)';
+    // small animated glow on images
+    document.querySelectorAll('.card').forEach((c,i)=>{
+      c.style.border = '1px solid rgba(0,209,255,0.06)';
+      c.style.boxShadow = '0 20px 50px rgba(0,209,255,0.06)';
+      // tiny tilt
+      c.style.transform = `translateY(-4px) rotate(${(i%2?1:-1)}deg)`;
+    });
+  } else {
+    robotToggle.textContent = 'Modo Robô';
+    document.body.style.filter = '';
+    document.querySelectorAll('.card').forEach(c=>{
+      c.style.border = '';
+      c.style.boxShadow = '';
+      c.style.transform = '';
+    });
+  }
+}
+
+// shuffle function
+shuffleBtn.addEventListener('click', shuffleCards);
+function shuffleCards(){
+  const cards = Array.from(grid.children);
+  for(let i = cards.length -1; i>0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    grid.appendChild(cards[j]);
+    cards.splice(j,1);
+  }
+  // small focus effect to show change
+  grid.animate([{opacity:0.85},{opacity:1}],{duration:240});
+}
+
+// small accessible focus via keyboard on cards
+document.querySelectorAll('.card').forEach(c=>{
+  c.tabIndex = 0;
+});
+
+// remember slider preference in session
+window.addEventListener('beforeunload', ()=>{
+  sessionStorage.setItem('gloss_size', sizeRange.value);
+  sessionStorage.setItem('gloss_robot', robotOn ? '1':'0');
+});
+document.addEventListener('DOMContentLoaded', ()=>{
+  const s = sessionStorage.getItem('gloss_size');
+  const r = sessionStorage.getItem('gloss_robot');
+  if(s) { sizeRange.value = s; applySize(Number(s)); }
+  if(r === '1') { toggleRobot(); }
+});
+</script>
 </body>
 </html>
